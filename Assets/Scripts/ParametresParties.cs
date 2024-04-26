@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+
 public class ParametresParties
 {
     public static ParametresParties Instance { get; private set; } = new ParametresParties();
@@ -22,4 +24,6 @@ public class ParametresParties
     private ParametresParties()
     {
     }
+    public bool charac { get; set; } = false;
+
 }

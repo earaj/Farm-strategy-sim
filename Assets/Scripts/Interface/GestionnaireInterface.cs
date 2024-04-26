@@ -25,6 +25,14 @@ public class GestionnaireInterface : MonoBehaviour
     [SerializeField] private TMP_Text[] valeursDepart;
     [SerializeField] private TMP_Dropdown difficulteDropdown;
 
+    [SerializeField] private TMP_Dropdown characterDropdown;
+    [SerializeField] private GameObject fermier;
+    [SerializeField] private GameObject fermiere;
+
+    private bool characterM = true;
+
+    private ChoixCharacter choix;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -84,6 +92,7 @@ public class GestionnaireInterface : MonoBehaviour
         if (nomJoueur.text != string.Empty)
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene("Ferme");
+            ParametresParties.Instance.charac = characterM;
         }
     }
 
@@ -108,4 +117,22 @@ public class GestionnaireInterface : MonoBehaviour
     {
         presentation.text = $"\u266A \u266B Dans la ferme \u00e0  {nomJoueur.text} \u266B \u266A";
     }
+
+    public void SetSelectedPrefab()
+    {
+        if (characterDropdown.value == 0)
+        {
+            fermiere.SetActive(false);
+            fermier.SetActive(true);
+            characterM = true;
+        }
+        else if (characterDropdown.value == 1)
+        {
+            fermier.SetActive(false);
+            fermiere.SetActive(true);
+            characterM = false;
+        }
+    }
+
+
 }
