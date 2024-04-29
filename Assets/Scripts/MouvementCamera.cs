@@ -11,12 +11,13 @@ public class MouvementCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _joueur = UnityEngine.GameObject.Find("Joueur");
+        
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
+        _joueur = UnityEngine.GameObject.Find("Joueur");
         Vector3 translation = _joueur.transform.TransformDirection(_offsetJoueur); 
         Vector3 nouvellePosition = _joueur.transform.position + translation;
         transform.position = nouvellePosition;

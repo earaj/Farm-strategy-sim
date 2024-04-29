@@ -17,17 +17,12 @@ public class ChoixCharacter : MonoBehaviour
         if (ParametresParties.Instance.charac == false)
         {
             fermiere.SetActive(true);
-            fermier.SetActive(false);
-            
-            
-            
+            fermier.SetActive(false);   
         }
         else
         {
             fermier.SetActive(true);
             fermiere.SetActive(false);
-         
-            
         }
     }
 

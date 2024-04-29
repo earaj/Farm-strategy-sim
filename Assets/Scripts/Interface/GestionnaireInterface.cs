@@ -31,8 +31,6 @@ public class GestionnaireInterface : MonoBehaviour
 
     private bool characterM = true;
 
-    private ChoixCharacter choix;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -133,6 +131,4 @@ public class GestionnaireInterface : MonoBehaviour
             characterM = false;
         }
     }
-
-
 }
