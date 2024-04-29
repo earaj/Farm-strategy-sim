@@ -13,7 +13,15 @@ public class GestionnaireInterface : MonoBehaviour
         Difficile
     }
 
+     enum TypeForet
+    {
+        Grid,
+        Random,
+        Simulation
+    }
+
     private Difficulte difficulte;
+    private TypeForet typeForet;
 
     [SerializeField] private TMP_InputField nomJoueur;
     [SerializeField] private TMP_Text presentation;
@@ -29,6 +37,10 @@ public class GestionnaireInterface : MonoBehaviour
     [SerializeField] private GameObject fermier;
     [SerializeField] private GameObject fermiere;
 
+    [SerializeField] private TMP_Dropdown typeForetDropdown;
+    private GenerationArbre generArbre;
+
+
     private bool characterM = true;
 
     // Start is called before the first frame update
@@ -39,6 +51,8 @@ public class GestionnaireInterface : MonoBehaviour
 
         difficulte = Difficulte.Facile;
         MettreAJour(valeursFacile);
+
+        typeForet = TypeForet.Grid;
     }
 
     void Update()
@@ -129,6 +143,24 @@ public class GestionnaireInterface : MonoBehaviour
             fermier.SetActive(false);
             fermiere.SetActive(true);
             characterM = false;
+        }
+    }
+
+    public void ChangerTypeGeneration()
+    {
+        typeForet = (TypeForet) typeForetDropdown.value;
+        
+        switch (typeForet)
+        {
+            case TypeForet.Grid:
+                ParametresParties.Instance.typeForet = 0;
+                break;
+            case TypeForet.Random:
+               ParametresParties.Instance.typeForet = 1;
+                break;
+            case TypeForet.Simulation:
+                ParametresParties.Instance.typeForet = 2;
+                break;
         }
     }
 }

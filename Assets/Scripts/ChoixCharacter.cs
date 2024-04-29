@@ -8,8 +8,6 @@ public class ChoixCharacter : MonoBehaviour
     [SerializeField] private GameObject fermiere;
     [SerializeField] private GameObject fermier;
 
-    public bool check;
-
     // Start is called before the first frame update
     void Start()
     {

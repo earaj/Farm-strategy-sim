@@ -26,4 +26,5 @@ public class ParametresParties
     }
     public bool charac { get; set; } = false;
 
+    public int typeForet { get; set; } = 0;
 }
