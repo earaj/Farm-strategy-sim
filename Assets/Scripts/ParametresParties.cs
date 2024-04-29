@@ -24,7 +24,14 @@ public class ParametresParties
     private ParametresParties()
     {
     }
+
+    /// <summary>
+    /// Methode pour comprendre la choix de character
+    /// </summary>
     public bool charac { get; set; } = false;
 
+    /// <summary>
+    /// Methode pour comprendre la choix de type de foret
+    /// </summary>
     public int typeForet { get; set; } = 0;
 }

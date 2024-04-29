@@ -130,8 +130,13 @@ public class GestionnaireInterface : MonoBehaviour
         presentation.text = $"\u266A \u266B Dans la ferme \u00e0  {nomJoueur.text} \u266B \u266A";
     }
 
+    /// <summary>
+    /// Methode pour changer le character selectionne
+    /// </summary>
     public void SetSelectedPrefab()
     {
+        // 0 = fermier, 1 = fermiere
+
         if (characterDropdown.value == 0)
         {
             fermiere.SetActive(false);
@@ -146,10 +151,15 @@ public class GestionnaireInterface : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Methode pour changer le type de generation de foret
+    /// </summary>
     public void ChangerTypeGeneration()
     {
         typeForet = (TypeForet) typeForetDropdown.value;
         
+        // 0 = grille, 1 = random, 2 = simulation
+
         switch (typeForet)
         {
             case TypeForet.Grid:
