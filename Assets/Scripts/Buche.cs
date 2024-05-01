@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Arbre : MonoBehaviour, IActionnable
+public class Buche : MonoBehaviour, IActionnable
 {
-    public GameObject logPrefab;
-    public float tomber = 2.0f;
-    public float delaiApparenceBuch = 1.0f;
-    public float desaparenceBuch = 0.5f;
-    public float activation = -5f; // active le stop
 
-    private bool tombe = false;
+    public float activation = 0.1f; // active le stop
+
     private bool marche = false;
+
+    private Inventaire inventaire;
 
     void Start()
     {
@@ -51,7 +49,7 @@ public class Arbre : MonoBehaviour, IActionnable
 
     public bool Permis(ComportementJoueur sujet)
     {
-        return true; 
+        return true;
     }
 
     void Update()
@@ -61,52 +59,22 @@ public class Arbre : MonoBehaviour, IActionnable
         if (joueur != null && marche)
         {
             Debug.Log("Saaa");
+           
+
             if (Vector3.Distance(transform.position, joueur.transform.position) <= activation)
             {
-                Debug.Log("arbre");
+                Debug.Log("Buche");
                 animator.SetBool("Walking", false);
-                animator.SetBool("Pousse", true);
+                animator.SetBool("Ramasse", true);
                 marche = false;
                 GameObject.Find("Joueur").GetComponent<ComportementJoueur>().ActiveCharacterController();
-                StartFalling();
-            }
-        }
-
-        if (tombe)
-        {
-            float vitesseTombee = 90.0f / tomber;
-            float rotationAmount = Time.deltaTime * vitesseTombee;
-           // transform.Rotate(joueur.transform.right, rotationAmount, Space.World);
-
-            // Clamp the rotation to ensure it doesn't exceed the maximum allowed rotation
-            float maximumRotation = 40f;
-            if (Mathf.Abs(transform.rotation.eulerAngles.y + rotationAmount) < maximumRotation )
-            {
-                transform.Rotate(joueur.transform.right, rotationAmount, Space.World);
+                Ramasser();
             }
         }
     }
 
-    void StartFalling()
+    public void Ramasser()
     {
-        //Invoke("SpawnBuche", delaiApparenceBuch);
-        Invoke("DetruireArbre", tomber + desaparenceBuch);
-        tombe = true;
-    }
-
-    void SpawnBuche()
-    {
-        GameObject joueur = GameObject.Find("Joueur");
-        Vector3 playerForward = joueur.transform.forward;
-        Vector3 spawnOffset = playerForward * 5f; 
-        Vector3 spawnPosition = joueur.transform.position + spawnOffset + new Vector3(0f, 0, 0f); 
-        Quaternion rotation = Quaternion.Euler(0, 90, 90);
-        Instantiate(logPrefab, spawnPosition, rotation);
-    }
-
-    void DetruireArbre()
-    {
-
         GameObject joueur = GameObject.Find("Joueur");
         Animator animator = joueur.GetComponent<Animator>();
         if (joueur != null)
@@ -117,8 +85,11 @@ public class Arbre : MonoBehaviour, IActionnable
                 comportementJoueur.ChangerEtat(comportementJoueur.EtatNormal);
             }
         }
-        animator.SetBool("Pousse", false);
-        SpawnBuche();
+        animator.SetBool("Ramasse", false);
+
+        Debug.Log("CAlled0");
+        //inventaire.GetInstanceID
+        //SpawnBuche();
         Destroy(gameObject);
     }
 }

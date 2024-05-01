@@ -152,4 +152,9 @@ public class ComportementJoueur : MonoBehaviour
         if (navMeshAgent != null)
             navMeshAgent.enabled = false;
     }
+
+    internal void EtatAUtiliser(ComportementJoueur sujet)
+    {
+        throw new NotImplementedException();
+    }
 }

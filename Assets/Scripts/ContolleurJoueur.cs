@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class ContolleurJoueur : MonoBehaviour
 {
+ 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -21,12 +24,21 @@ public class ContolleurJoueur : MonoBehaviour
                     if (sujet != null)
                     {
                         Arbre arbre = hit.collider.GetComponent<Arbre>();
-                        if (arbre != null)
-                        {
-                            sujet.ActiveNavMeshAgent();
-                            arbre.EtatAUtiliser(sujet);
-                            StartCoroutine(ReactiveCharacterController(sujet));
-                        }
+                        Buche buche= hit.collider.GetComponent<Buche>();
+
+                        
+                            if (arbre != null)
+                            {
+                                sujet.ActiveNavMeshAgent();
+                                arbre.EtatAUtiliser(sujet);
+                                StartCoroutine(ReactiveCharacterController(sujet));
+                            }
+                            else if (buche != null)
+                            {
+                                sujet.ActiveNavMeshAgent();
+                                buche.EtatAUtiliser(sujet);
+                                StartCoroutine(ReactiveCharacterController(sujet));
+                            }
                     }
                 }
             }

@@ -3751,7 +3751,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1447052500}
         m_TargetAssemblyTypeName: GestionnaireInterface, Assembly-CSharp
-        m_MethodName: ChangerTypeGeneration
+        m_MethodName: ChangerDifficulte
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
