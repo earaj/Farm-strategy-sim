@@ -45,6 +45,9 @@ public class ComportementJoueur : MonoBehaviour
 
     private Soleil _soleil;
 
+    private NavMeshAgent navMeshAgent;
+    private CharacterController characterController;
+
 
     // Start is called before the first frame update
     void Start()
@@ -68,6 +71,9 @@ public class ComportementJoueur : MonoBehaviour
         TempsDepuisDernierRepas = 0.0f;
 
         GetComponent<NavMeshAgent>().enabled = false;
+
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        characterController = GetComponent<CharacterController>();
     }
 
     void Update()
@@ -120,5 +126,30 @@ public class ComportementJoueur : MonoBehaviour
     public bool PeutManger
     {
         get => _inventaire.Oeuf > 0 || _inventaire.Choux > 0;
+    }
+
+
+    public void ActiveNavMeshAgent()
+    {
+        if (navMeshAgent != null)
+            navMeshAgent.enabled = true;
+
+        if (characterController != null)
+            characterController.enabled = false;
+    }
+
+    public void ActiveCharacterController()
+    {
+        if (characterController != null)
+            characterController.enabled = true;
+
+        if (navMeshAgent != null)
+            navMeshAgent.enabled = false;
+    }
+
+    public void DeactiveNavMeshAgent()
+    {
+        if (navMeshAgent != null)
+            navMeshAgent.enabled = false;
     }
 }

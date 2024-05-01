@@ -86,14 +86,7 @@ public class SimuleGeneration : GenerationArbreStrategie
                     bool zoneBarre = EstDansLaZoneInterdit(position, exclusion);
                     if (!zoneBarre)
                     {
-                        GameObject arbreInstance = new GameObject("Arbres");
-
-                        MeshFilter meshFilter = arbreInstance.AddComponent<MeshFilter>();
-                        meshFilter.sharedMesh = arbre.GetComponent<MeshFilter>().sharedMesh;
-
-                        MeshRenderer meshRenderer = arbreInstance.AddComponent<MeshRenderer>();
-                        meshRenderer.sharedMaterial = arbre.GetComponent<MeshRenderer>().sharedMaterial;
-
+                        GameObject arbreInstance = GameObject.Instantiate(arbre);
                         arbreInstance.transform.position = position;
                     }
                 }

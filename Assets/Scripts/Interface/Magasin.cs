@@ -9,6 +9,7 @@ public class Magasin : MonoBehaviour
     const int PRIX_POULE = 100;
     const int PRIX_GRAINES = 3;
     const int PRIX_CHOUX = 5;
+    const int PRIX_BOIS = 5;
 
     public static int ITEM_LE_MOINS_CHER
     {
@@ -28,6 +29,8 @@ public class Magasin : MonoBehaviour
 
     [SerializeField] private TMP_Text _prixChoux;
 
+    [SerializeField] private TMP_Text _prixBois;
+
 
     [SerializeField] private TMP_Text _messageBienvenue;
 
@@ -43,6 +46,8 @@ public class Magasin : MonoBehaviour
 
     [SerializeField] private Button _boutonChoux;
 
+    [SerializeField] private Button _boutonBois;
+
     private GameObject _joueur;
     private Inventaire _inventaire;
 
@@ -54,7 +59,7 @@ public class Magasin : MonoBehaviour
         _prixPoule.text = PRIX_POULE.ToString();
         _prixGraines.text = PRIX_GRAINES.ToString();
         _prixChoux.text = PRIX_CHOUX.ToString();
-
+        _prixBois.text= PRIX_BOIS.ToString();
 
         _joueur = GameObject.Find("Joueur");
         _messageBienvenue.text = $"Bonjour {_joueur.GetComponent<DonneesJoueur>().Nom}, " +
@@ -94,6 +99,7 @@ public class Magasin : MonoBehaviour
         _boutonPoule.interactable = _inventaire.Or >= PRIX_POULE;
         _boutonGraines.interactable = _inventaire.Or >= PRIX_GRAINES;
         _boutonChoux.interactable = _inventaire.Choux >= 1;
+        _boutonBois.interactable = _inventaire.Bois >= 1;
     }
 
     public void OnTriggerEnter(Collider other)

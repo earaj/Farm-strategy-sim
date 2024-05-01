@@ -26,15 +26,7 @@ public class GrilleGeneration : GenerationArbreStrategie
                 bool zoneBarre = EstDansLaZoneInterdit(positionArbre, exclusion);//Verification des zones interdites (maison, route, magasin)
                 if (!zoneBarre)
                 {
-                    //Placement des arbres
-                    GameObject arbreInstance = new GameObject("Arbres");
-
-                    MeshFilter meshFilter = arbreInstance.AddComponent<MeshFilter>();
-                    meshFilter.sharedMesh = arbre.GetComponent<MeshFilter>().sharedMesh;
-
-                    MeshRenderer meshRenderer = arbreInstance.AddComponent<MeshRenderer>();
-                    meshRenderer.sharedMaterial = arbre.GetComponent<MeshRenderer>().sharedMaterial;
-
+                     GameObject arbreInstance = GameObject.Instantiate(arbre);
                     arbreInstance.transform.position = positionArbre;
                 }
             }

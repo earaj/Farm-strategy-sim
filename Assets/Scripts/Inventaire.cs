@@ -7,12 +7,15 @@ public class Inventaire : MonoBehaviour
     public int Choux { get; set; }
     public int Graines { get; set; }
 
+    public int Bois { get; set; }
+
     void Awake()
     {
         Or = ParametresParties.Instance.OrDepart;
         Oeuf = ParametresParties.Instance.OeufsDepart;
         Graines = ParametresParties.Instance.SemencesDepart;
         Choux = 0;
+        Bois = 0;
     }
 
     public void ToutPerdre()
@@ -21,6 +24,7 @@ public class Inventaire : MonoBehaviour
         Oeuf = 0;
         Choux = 0;
         Graines = 0;
+        Bois = 0;
     }
 
     public void RemplirPourTester()
@@ -29,5 +33,6 @@ public class Inventaire : MonoBehaviour
         Oeuf = 1000;
         Choux = 1000;
         Graines = 1000;
+        Bois = 1000;
     }
 }
