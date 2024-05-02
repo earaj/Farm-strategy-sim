@@ -128,7 +128,7 @@ public class ComportementJoueur : MonoBehaviour
         get => _inventaire.Oeuf > 0 || _inventaire.Choux > 0;
     }
 
-
+    //Activer le nav mesh agent
     public void ActiveNavMeshAgent()
     {
         if (navMeshAgent != null)
@@ -138,6 +138,7 @@ public class ComportementJoueur : MonoBehaviour
             characterController.enabled = false;
     }
 
+    //Activer le character controller
     public void ActiveCharacterController()
     {
         if (characterController != null)
@@ -147,6 +148,7 @@ public class ComportementJoueur : MonoBehaviour
             navMeshAgent.enabled = false;
     }
 
+    //l'etat du joueur
     internal void EtatAUtiliser(ComportementJoueur sujet)
     {
         throw new NotImplementedException();

@@ -68,7 +68,6 @@ public class Buche : MonoBehaviour, IActionnable
         {
             if (Vector3.Distance(transform.position, joueur.transform.position) <= activation)
             {
-                Debug.Log("Buche");
                 animator.SetBool("Walking", false);
                 animator.SetBool("Ramasse", true);
                 marche = false;

@@ -7,6 +7,8 @@ public class EtatAction : EtatJoueur
     public override bool DansDialogue => false;
     public override float EnergieDepensee => ConstantesJeu.COUT_MARCHER;
 
+    private float _rotationTmp = 0.25f;
+    private Quaternion _rotaionVoulu;
 
     private GameObject _destination;
     private NavMeshAgent _navMeshAgent;
@@ -25,7 +27,8 @@ public class EtatAction : EtatJoueur
         ControleurMouvement.enabled = false;
         _navMeshAgent.enabled = true;
         Vector3 direction = _destination.transform.position - Sujet.transform.position;
-        Sujet.transform.rotation = Quaternion.LookRotation(direction);
+        //Ralentir la vitesse de rotation
+        Sujet.transform.rotation = Quaternion.Slerp(Sujet.transform.rotation,_rotaionVoulu, Time.deltaTime * _rotationTmp);
         Vector3 pointProche = _destination.GetComponent<Collider>().ClosestPoint(Sujet.transform.position);
         pointDestination = pointProche - direction.normalized * 0.3f;
         _navMeshAgent.SetDestination(pointDestination);
