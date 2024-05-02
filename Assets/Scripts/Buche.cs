@@ -5,22 +5,28 @@ using UnityEngine.AI;
 
 public class Buche : MonoBehaviour, IActionnable
 {
-
-    public float activation = 0.1f; // active le stop
+    //Detection de la buche
+    public float activation = 1f;
 
     private bool marche = false;
 
-    private Inventaire inventaire;
 
     void Start()
     {
+        
+    
     }
 
-
+    /// <summary>
+    /// Utilisation d'etat pour rammaser le buche
+    /// </summary>
+    /// <param name="sujet"></param>
+    /// <returns></returns>
     public EtatJoueur EtatAUtiliser(ComportementJoueur sujet)
     {
         if (Permis(sujet))
         {
+            //Animation de marche
             Animator animator = sujet.GetComponent<Animator>();
             if (animator != null)
             {
@@ -28,6 +34,7 @@ public class Buche : MonoBehaviour, IActionnable
                 marche = true;
             }
 
+            //Destination du joueur
             GameObject joueur = GameObject.Find("Joueur");
             if (joueur != null)
             {
@@ -54,13 +61,11 @@ public class Buche : MonoBehaviour, IActionnable
 
     void Update()
     {
+        //Marche vers le buche
         GameObject joueur = GameObject.Find("Joueur");
         Animator animator = joueur.GetComponent<Animator>();
         if (joueur != null && marche)
         {
-            Debug.Log("Saaa");
-           
-
             if (Vector3.Distance(transform.position, joueur.transform.position) <= activation)
             {
                 Debug.Log("Buche");
@@ -68,11 +73,14 @@ public class Buche : MonoBehaviour, IActionnable
                 animator.SetBool("Ramasse", true);
                 marche = false;
                 GameObject.Find("Joueur").GetComponent<ComportementJoueur>().ActiveCharacterController();
-                Ramasser();
+                Invoke("Ramasser", 3f);
             }
         }
     }
 
+    /// <summary>
+    /// Ramassage et la destruction de la buche
+    /// </summary>
     public void Ramasser()
     {
         GameObject joueur = GameObject.Find("Joueur");
@@ -86,10 +94,10 @@ public class Buche : MonoBehaviour, IActionnable
             }
         }
         animator.SetBool("Ramasse", false);
-
-        Debug.Log("CAlled0");
-        //inventaire.GetInstanceID
-        //SpawnBuche();
+        Inventaire inventaireJoueur = joueur.GetComponent<Inventaire>();
+        inventaireJoueur.Bois++;
         Destroy(gameObject);
     }
+
+
 }

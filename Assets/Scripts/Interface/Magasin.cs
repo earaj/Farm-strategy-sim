@@ -90,6 +90,11 @@ public class Magasin : MonoBehaviour
             _inventaire.Choux -= 1;
             _inventaire.Or += PRIX_CHOUX;
         });
+        _boutonBois.onClick.AddListener(() =>
+        {
+            _inventaire.Bois -= 1;
+            _inventaire.Or += PRIX_BOIS;
+        });
     }
 
 // Update is called once per frame

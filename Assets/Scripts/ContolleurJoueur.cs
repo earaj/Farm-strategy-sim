@@ -31,26 +31,15 @@ public class ContolleurJoueur : MonoBehaviour
                             {
                                 sujet.ActiveNavMeshAgent();
                                 arbre.EtatAUtiliser(sujet);
-                                StartCoroutine(ReactiveCharacterController(sujet));
                             }
                             else if (buche != null)
                             {
                                 sujet.ActiveNavMeshAgent();
                                 buche.EtatAUtiliser(sujet);
-                                StartCoroutine(ReactiveCharacterController(sujet));
                             }
                     }
                 }
             }
         }
-    }
-    IEnumerator ReactiveCharacterController(ComportementJoueur sujet)
-    {
-        while (!sujet.EtatNormal.EstActif)
-        {
-            yield return null;
-        }
-        sujet.ActiveCharacterController();
-        sujet.DeactiveNavMeshAgent();
     }
 }

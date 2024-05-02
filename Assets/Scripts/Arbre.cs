@@ -6,10 +6,12 @@ using UnityEngine.AI;
 public class Arbre : MonoBehaviour, IActionnable
 {
     public GameObject logPrefab;
-    public float tomber = 2.0f;
+    public float tomber = 1.5f;
     public float delaiApparenceBuch = 1.0f;
-    public float desaparenceBuch = 0.5f;
-    public float activation = -5f; // active le stop
+    //Detection de la buche
+    public float activation = 1f;
+
+    public float maximumRotation = 40f;
 
     private bool tombe = false;
     private bool marche = false;
@@ -18,11 +20,16 @@ public class Arbre : MonoBehaviour, IActionnable
     {
     }
 
-
+    /// <summary>
+    /// Utilisation d'etat pour pousser l'arbre
+    /// </summary>
+    /// <param name="sujet"></param>
+    /// <returns></returns>
     public EtatJoueur EtatAUtiliser(ComportementJoueur sujet)
     {
         if (Permis(sujet))
         {
+            //Animation de marche
             Animator animator = sujet.GetComponent<Animator>();
             if (animator != null)
             {
@@ -30,6 +37,7 @@ public class Arbre : MonoBehaviour, IActionnable
                 marche = true;
             }
 
+            //Destination du joueur
             GameObject joueur = GameObject.Find("Joueur");
             if (joueur != null)
             {
@@ -56,59 +64,76 @@ public class Arbre : MonoBehaviour, IActionnable
 
     void Update()
     {
+        //Verification de la distance entre le joueur et l'arbre
         GameObject joueur = GameObject.Find("Joueur");
         Animator animator = joueur.GetComponent<Animator>();
         if (joueur != null && marche)
         {
-            Debug.Log("Saaa");
             if (Vector3.Distance(transform.position, joueur.transform.position) <= activation)
             {
-                Debug.Log("arbre");
                 animator.SetBool("Walking", false);
                 animator.SetBool("Pousse", true);
                 marche = false;
-                GameObject.Find("Joueur").GetComponent<ComportementJoueur>().ActiveCharacterController();
-                StartFalling();
+                joueur.GetComponent<ComportementJoueur>().ActiveCharacterController();
+                Invoke("Tomber", 2f);
             }
         }
 
+        // Rotation de l'arbre (tomber)
         if (tombe)
         {
             float vitesseTombee = 90.0f / tomber;
-            float rotationAmount = Time.deltaTime * vitesseTombee;
-           // transform.Rotate(joueur.transform.right, rotationAmount, Space.World);
+            float rotaionNb = Time.deltaTime * vitesseTombee;
 
-            // Clamp the rotation to ensure it doesn't exceed the maximum allowed rotation
-            float maximumRotation = 40f;
-            if (Mathf.Abs(transform.rotation.eulerAngles.y + rotationAmount) < maximumRotation )
+            // Determeine la direction de l'arbre
+            Vector3 directionToPlayer = transform.position - joueur.transform.position;
+            Vector3 rotationAxis = Vector3.Cross(Vector3.up, directionToPlayer);
+
+            // rotaion jusqu'a la terre
+            float finRotaion = Mathf.Min(rotaionNb, maximumRotation);
+
+            // Appliquer la rotation
+            if (Mathf.Abs(transform.rotation.eulerAngles.y + finRotaion) < maximumRotation)
             {
-                transform.Rotate(joueur.transform.right, rotationAmount, Space.World);
+                transform.Rotate(rotationAxis, finRotaion, Space.World);
             }
         }
     }
 
-    void StartFalling()
+    /// <summary>
+    /// Rotation de l'arbre (pour tomber)
+    /// </summary>
+    void Tomber()
     {
-        //Invoke("SpawnBuche", delaiApparenceBuch);
-        Invoke("DetruireArbre", tomber + desaparenceBuch);
+        GameObject joueur = GameObject.Find("Joueur");
+        Animator animator = joueur.GetComponent<Animator>();
+        Invoke("DetruireArbre", 3 );
+        animator.SetBool("Pousse", false);
         tombe = true;
     }
 
+    /// <summary>
+    /// Création de la buche
+    /// </summary>
     void SpawnBuche()
     {
         GameObject joueur = GameObject.Find("Joueur");
-        Vector3 playerForward = joueur.transform.forward;
-        Vector3 spawnOffset = playerForward * 5f; 
-        Vector3 spawnPosition = joueur.transform.position + spawnOffset + new Vector3(0f, 0, 0f); 
+
+        //position de la buche dans le feuillet d'arbre
+        Vector3 emplacement = joueur.transform.forward;
+        Vector3 spawnOffset = emplacement * 5f; 
+        Vector3 position = joueur.transform.position + spawnOffset; 
         Quaternion rotation = Quaternion.Euler(0, 90, 90);
-        Instantiate(logPrefab, spawnPosition, rotation);
+        Instantiate(logPrefab, position, rotation);
     }
 
+    /// <summary>
+    /// Destruction de l'arbre
+    /// </summary>
     void DetruireArbre()
     {
 
         GameObject joueur = GameObject.Find("Joueur");
-        Animator animator = joueur.GetComponent<Animator>();
         if (joueur != null)
         {
             ComportementJoueur comportementJoueur = joueur.GetComponent<ComportementJoueur>();
@@ -117,7 +142,7 @@ public class Arbre : MonoBehaviour, IActionnable
                 comportementJoueur.ChangerEtat(comportementJoueur.EtatNormal);
             }
         }
-        animator.SetBool("Pousse", false);
+        tombe = false;
         SpawnBuche();
         Destroy(gameObject);
     }
