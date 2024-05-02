@@ -28,8 +28,9 @@ public class ComportementJoueur : MonoBehaviour
         get { return _facteurCourse; }
     }
 
-    public float ConsommationEnergie => _etat.EnergieDepensee;
-    public float MultiplicateurScale => _etat.MultiplicateurScale;
+    public float ConsommationEnergie => _etat?.EnergieDepensee ?? 0;
+    public float MultiplicateurScale => _etat?.MultiplicateurScale ?? 1;
+
 
     public bool EstActif => _etat.EstActif;
     public bool DansDialogue => _etat.DansDialogue;
@@ -79,14 +80,23 @@ public class ComportementJoueur : MonoBehaviour
     void Update()
     {
         TempsDepuisDernierRepas += _soleil.DeltaMinutesEcoulees;
-        _etat.Handle();
+        if (_etat != null)
+        {
+            _etat.Handle();
+        }
     }
 
     public void ChangerEtat(EtatJoueur nouvelEtat)
     {
-        _etat.Exit();
+        if (_etat != null)
+        {
+            _etat.Exit();
+        }
         _etat = nouvelEtat;
-        _etat.Enter();
+        if (_etat != null)
+        {
+            _etat.Enter();
+        }
     }
 
     public void ReplacerPositionDepart()
@@ -148,7 +158,6 @@ public class ComportementJoueur : MonoBehaviour
             navMeshAgent.enabled = false;
     }
 
-    //l'etat du joueur
     internal void EtatAUtiliser(ComportementJoueur sujet)
     {
         throw new NotImplementedException();

@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Buche : MonoBehaviour, IActionnable
 {
     //Detection de la buche
-    public float activation = 1f;
+    public float activation = 2f;
 
     private bool marche = false;
 
