@@ -3,61 +3,88 @@ using UnityEngine.AI;
 
 public class MouvementPoulet : MonoBehaviour
 {
-    // private UnityEngine.GameObject _zoneRelachement;
-    // private float _angleDerriere;  // L'angle pour que le poulet soit derrière le joueur
-    // private UnityEngine.GameObject joueur;
-    // private bool _suivreJoueur = true;
-
     private NavMeshAgent _agent;
     private Animator _animator;
 
+    private Transform _joueur;
+
+    private float _distanceJoueur = 2f;
+    private float vitesseSuivre = 4f;
+    private float vitesseDansFerme = 1f;
+
     private GameObject[] _pointsDeDeplacement;
+    private bool estDanslaFerme = false;
 
     void Start()
     {
-        // _zoneRelachement = UnityEngine.GameObject.Find("ZoneRelachePoulet");
-        // joueur = UnityEngine.GameObject.Find("Joueur");
-        // _suivreJoueur = true;
-        // _angleDerriere = Random.Range(-60.0f, 60.0f);
 
         _animator = GetComponent<Animator>();
         _agent = GetComponent<NavMeshAgent>();
         _pointsDeDeplacement = GameObject.FindGameObjectsWithTag("PointsPoulet");
+        _joueur = GameObject.Find("Joueur").transform;
         _animator.SetBool("Walk", true);
         Initialiser();
     }
 
     void Initialiser()
     {
-        // Position initiale sur la ferme
-        _agent.enabled = false;
-        var point = _pointsDeDeplacement[Random.Range(0, _pointsDeDeplacement.Length)];
-        transform.position = point.transform.position;
-        _agent.enabled = true;
+        // Position initiale a cote du joueur
+        Vector3 spawnPosition = _joueur.position + _joueur.forward * 2f; 
+        transform.position = spawnPosition;
 
+        // Activer le comportement de pondre des oeufs
         gameObject.GetComponent<PondreOeufs>().enabled = true;
 
-        ChoisirDestinationAleatoire();
+        // Suivre le joueur jusqu'à l'entrée de la ferme
+        SuivreJoueur();
     }
 
     void ChoisirDestinationAleatoire()
     {
+        _agent.speed = vitesseDansFerme;
         GameObject point = _pointsDeDeplacement[Random.Range(0, _pointsDeDeplacement.Length)];
         _agent.SetDestination(point.transform.position);
     }
 
+    /// <summary>
+    /// Poule suivre le suivre le joueur
+    /// </summary>
+    void SuivreJoueur()
+    {
+        _agent.enabled = true;
+
+        // Calculer la direction vers le joueur
+        Vector3 directionVersJoueur = (_joueur.position - transform.position).normalized;
+        Vector3 destination = _joueur.position - directionVersJoueur * _distanceJoueur;
+
+        _agent.SetDestination(destination);
+        _agent.speed = vitesseSuivre;
+    }
+
+
     void Update()
     {
-        // if (_suivreJoueur)
-        // {
-        //     Vector3 directionAvecJoueur = Quaternion.AngleAxis(_angleDerriere, Vector3.up) * joueur.transform.forward;
-        //     transform.position = joueur.transform.position - directionAvecJoueur;
-        //     transform.rotation = joueur.transform.rotation;
-        // }
-
-        if (!_agent.pathPending && _agent.remainingDistance < 0.5f)
+        // Si le poulet arrive a ferme choisir une nouvelle destination
+        if ( estDanslaFerme)
         {
             ChoisirDestinationAleatoire();
+        }
+        else
+        {
+            // Suivre le joueur jusqu'à l'entrée de la ferme
+            SuivreJoueur();
+        }
+    }
+
+    /// <summary>
+    /// Verifier si le poulet est dans la ferme
+    /// </summary>
+    /// <param name="other"></param>
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("entree"))
+        {
+            estDanslaFerme=true;
         }
     }
 }

@@ -48,6 +48,8 @@ public class Magasin : MonoBehaviour
 
     [SerializeField] private Button _boutonBois;
 
+    private int nbPoulesAchete = 0;
+
     private GameObject _joueur;
     private Inventaire _inventaire;
 
@@ -76,7 +78,7 @@ public class Magasin : MonoBehaviour
         _boutonPoule.onClick.AddListener(() =>
         {
             _inventaire.Or -= PRIX_POULE;
-            GameObject poule = Instantiate(_modelePoule);
+            nbPoulesAchete++;
         });
 
         _boutonGraines.onClick.AddListener(() =>
@@ -126,5 +128,15 @@ public class Magasin : MonoBehaviour
         _joueur.transform.Rotate(0, 180, 0);
         _joueur.GetComponent<CharacterController>().enabled = true;
         _joueur.GetComponent<ComportementJoueur>().ChangerEtat(_joueur.GetComponent<ComportementJoueur>().EtatNormal);
+
+        // Instancier les poules achetées apres quitter
+        if (nbPoulesAchete > 0)
+        {
+            for (int i = 0; i < nbPoulesAchete; i++)
+            {
+                Instantiate(_modelePoule, _sortieMagasin.transform.position + new Vector3(0, 0, i), Quaternion.identity);
+            }
+            nbPoulesAchete = 0;
+        }
     }
 }

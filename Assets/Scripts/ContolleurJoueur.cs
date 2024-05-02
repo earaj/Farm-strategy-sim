@@ -32,7 +32,7 @@ public class ContolleurJoueur : MonoBehaviour
                                 sujet.ActiveNavMeshAgent();
                                 arbre.EtatAUtiliser(sujet);
                             }
-                            else if (buche != null)
+                            if (buche != null)
                             {
                                 sujet.ActiveNavMeshAgent();
                                 buche.EtatAUtiliser(sujet);

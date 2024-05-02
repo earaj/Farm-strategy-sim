@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 647edd5944e4091418c641d293800bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _entree: {fileID: 2371538831692031573, guid: 030a0741b9c349142bcb608eca0f2ce3, type: 3}
 --- !u!195 &1007931774087834418
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -157,7 +158,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
