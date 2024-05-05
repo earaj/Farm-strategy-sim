@@ -93,7 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 647edd5944e4091418c641d293800bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _entree: {fileID: 2371538831692031573, guid: 030a0741b9c349142bcb608eca0f2ce3, type: 3}
+  estNuit: 0
 --- !u!195 &1007931774087834418
 NavMeshAgent:
   m_ObjectHideFlags: 0

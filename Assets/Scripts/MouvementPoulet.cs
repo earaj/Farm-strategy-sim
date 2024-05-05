@@ -10,17 +10,20 @@ public class MouvementPoulet : MonoBehaviour
 
     private float _distanceJoueur = 2f;
     private float vitesseSuivre = 4f;
-    private float vitesseDansFerme = 1f;
+    private float vitesseDansFerme = 0.5f;
 
     private GameObject[] _pointsDeDeplacement;
+    private GameObject[] _pointsDeDeplacementNuit;
     private bool estDanslaFerme = false;
+
+    private GameManager _gameManager;
 
     void Start()
     {
-
         _animator = GetComponent<Animator>();
         _agent = GetComponent<NavMeshAgent>();
-        _pointsDeDeplacement = GameObject.FindGameObjectsWithTag("PointsPoulet");
+        _pointsDeDeplacement = GameObject.FindGameObjectsWithTag("PointsPoulet");//Points de deplacement le jour
+        _pointsDeDeplacementNuit = GameObject.FindGameObjectsWithTag("PointSpecial");//Points de deplacement la nuit
         _joueur = GameObject.Find("Joueur").transform;
         _animator.SetBool("Walk", true);
         Initialiser();
@@ -29,7 +32,7 @@ public class MouvementPoulet : MonoBehaviour
     void Initialiser()
     {
         // Position initiale a cote du joueur
-        Vector3 spawnPosition = _joueur.position + _joueur.forward * 2f; 
+        Vector3 spawnPosition = _joueur.position + _joueur.forward * 2f;
         transform.position = spawnPosition;
 
         // Activer le comportement de pondre des oeufs
@@ -39,11 +42,28 @@ public class MouvementPoulet : MonoBehaviour
         SuivreJoueur();
     }
 
+    /// <summary>
+    /// Methode pour choisir une destination aleatoire
+    /// </summary>
     void ChoisirDestinationAleatoire()
     {
         _agent.speed = vitesseDansFerme;
-        GameObject point = _pointsDeDeplacement[Random.Range(0, _pointsDeDeplacement.Length)];
-        _agent.SetDestination(point.transform.position);
+        if (!_agent.pathPending && _agent.remainingDistance < 0.5f)
+        {
+            GameObject point;
+
+            // Si c'est la nuit poule peut sortir de ferme
+            if (_gameManager.estNuit)
+            {
+                point = _pointsDeDeplacementNuit[Random.Range(0, _pointsDeDeplacementNuit.Length)];
+            }
+            //Sinon poule reste dans la ferme
+            else 
+            {
+                point = _pointsDeDeplacement[Random.Range(0, _pointsDeDeplacement.Length)];
+            }
+            _agent.SetDestination(point.transform.position);
+        }
     }
 
     /// <summary>
@@ -64,8 +84,9 @@ public class MouvementPoulet : MonoBehaviour
 
     void Update()
     {
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         // Si le poulet arrive a ferme choisir une nouvelle destination
-        if ( estDanslaFerme)
+        if (estDanslaFerme)
         {
             ChoisirDestinationAleatoire();
         }
@@ -84,7 +105,12 @@ public class MouvementPoulet : MonoBehaviour
     {
         if (other.CompareTag("entree"))
         {
-            estDanslaFerme=true;
+            estDanslaFerme = true;
+        }
+        //Verifier si le renard touche le poule 
+        if (other.CompareTag("Renard"))
+        {
+            Destroy(gameObject);
         }
     }
 }

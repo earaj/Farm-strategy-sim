@@ -13,6 +13,9 @@ public class Maison : MonoBehaviour
     void Start()
     {
         _panelMaison.SetActive(false);
+    }
+    private void Update()
+    {
         _joueur = UnityEngine.GameObject.Find("Joueur").GetComponent<ComportementJoueur>();
     }
 

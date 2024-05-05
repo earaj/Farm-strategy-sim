@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class EtatRenard 
+public abstract class EtatRenard
 {
     public MouvementRenard Renard
     {
@@ -21,7 +21,7 @@ public abstract class EtatRenard
     {
         set; get;
     }
-    private float distanceVisibiliteRenard = 10.0f;
+    private float distanceVisibiliteRenard = 25.0f;
 
     public EtatRenard(MouvementRenard renard, GameObject poule)
     {
@@ -31,32 +31,32 @@ public abstract class EtatRenard
         Animateur = renard.GetComponent<Animator>();
     }
 
+    /// <summary>
+    /// Methode pour verifier si la poule est visible par le renard
+    /// </summary>
+    /// <returns></returns>
     protected bool PouleVisible()
     {
-        if(Poule != null) { 
+
         bool visible = false;
         RaycastHit hit;
-
-        Vector3 positionPoule = new Vector3(Poule.transform.position.x, 0.5f, Poule.transform.position.z);
-        Vector3 positionRenard = new Vector3(Renard.transform.position.x, 0.5f, Renard.transform.position.z);
-        Vector3 directionPoule = positionPoule - positionRenard;
-
-        if (directionPoule.magnitude <= distanceVisibiliteRenard)
+        if (Poule != null)
         {
-            // Detection d'obstacke entre renard et poules
-            if (Physics.Raycast(positionRenard, directionPoule, out hit))
+            //Calculation de la direction entre renard et poule
+            Vector3 positionPoule = new Vector3(Poule.transform.position.x, 0.5f, Poule.transform.position.z);
+            Vector3 positionRenard = new Vector3(Renard.transform.position.x, 0.5f, Renard.transform.position.z);
+            Vector3 directionPoule = positionPoule - positionRenard;
+
+            if (directionPoule.magnitude <= distanceVisibiliteRenard) //Distance au quelle re nard peut detecter le poule
             {
-                if (hit.transform == Poule.transform)
+                // Detection d'obstacke entre renard et poules
+                if (Physics.Raycast(positionRenard, directionPoule, out hit))
                 {
-                    // Verification d'angle
-                    float angle = Vector3.Angle(Renard.transform.forward, directionPoule);
-                    visible = angle <= 40.0f;
+                    return hit.transform == Poule.transform;
                 }
             }
         }
         return visible;
-        }
-        else { return false; }
     }
     public abstract void Enter();
     public abstract void Handle();

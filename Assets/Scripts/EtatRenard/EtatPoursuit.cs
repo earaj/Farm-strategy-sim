@@ -17,22 +17,21 @@ public class EtatPoursuit : EtatRenard
     public override void Handle()
     {
         bool manger = false;
+        //Si le poule est visible, renard va le manger
         if (PouleVisible())
         {
             AgentMouvement.destination = Poule.transform.position;
             manger = Vector3.Distance(Renard.transform.position, Poule.transform.position) <= 3.0f;
         }
 
+        //Changement d'etat a manger
         if (manger)
         {
             Renard.ChangerEtat(new EtatManger(Renard, Poule));
-            Animateur.SetBool("Attack", manger);
         }
     }
 
     public override void Leave()
     {
-        Animateur.SetBool("Walk", false);
-
     }
 }

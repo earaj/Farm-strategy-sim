@@ -5,12 +5,12 @@ using UnityEngine;
 public class EtatPatrouille : EtatRenard
 {
     private Transform[] _points;
-    private int _indexPatrouille;
+
 
     public EtatPatrouille(MouvementRenard renard, GameObject poule, Transform[] points) : base(renard, poule)
     {
         _points = points;
-        _indexPatrouille = 0;
+
     }
 
 
@@ -21,18 +21,13 @@ public class EtatPatrouille : EtatRenard
 
     public override void Handle()
     {
-        if (!AgentMouvement.pathPending)
+        //Si le renard arrive a la destination, il va choisir une autre destination (patrouille)
+        if (!AgentMouvement.pathPending && AgentMouvement.remainingDistance < 1f)
         {
-            if (AgentMouvement.remainingDistance <= 0.1f)
-            {
-                /** POur tester (Pas random)
-                AgentMouvement.destination = _points[_indexPatrouille].position;
-                _indexPatrouille = (_indexPatrouille + 1) % _points.Length;
-                **/
                 DistinationAleatoire();
-            }
         }
 
+        //Si le poule est visible, renard va le poursuit
         if (PouleVisible())
         {
             MouvementRenard mouvement = Renard.GetComponent<MouvementRenard>();
@@ -41,6 +36,9 @@ public class EtatPatrouille : EtatRenard
 
     }
 
+    /// <summary>
+    /// Methode pour choisir une destination aleatoire
+    /// </summary>
     private void DistinationAleatoire()
     {
         int randomIndex = Random.Range(0, _points.Length);
@@ -49,6 +47,5 @@ public class EtatPatrouille : EtatRenard
 
     public override void Leave()
     {
-        Animateur.SetBool("Walk", false);
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
@@ -5,7 +6,8 @@ using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Soleil _soleil;
-    [SerializeField] private GameObject prefabToInstantiate;
+    [SerializeField] private GameObject prefabRenard;
+    private GameObject cloneRenard;
 
     private ComportementJoueur _joueur;
 
@@ -17,6 +19,7 @@ public class GameManager : MonoBehaviour
     public int NumeroJour = 1;
 
     private bool estInstantiate = false;
+    public bool estNuit = false;
 
 
     void Start()
@@ -45,6 +48,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        _joueur = GameObject.Find("Joueur").GetComponent<ComportementJoueur>();
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SceneManager.LoadScene("MenuConfiguration");
@@ -61,34 +65,52 @@ public class GameManager : MonoBehaviour
 
         // L'?tat du joueur peut affecter le passage du temps (ex.: Dodo: tout va vite, menus: le temps est stopp?, etc)
         Time.timeScale *= _joueur.GetComponent<ComportementJoueur>().MultiplicateurScale;
+
+        //Distruction de renard
+
+            if (TempPourDetruire())
+            {
+                DetruireRenard();
+     }
+
+        //Creation de renard
         if (!estInstantiate && TempPourInstantiate())
         {
             InstantiateRenard();
             estInstantiate = true;
         }
+        
     }
+
+    /// <summary>
+    /// Creation de renard
+    /// </summary>
     private void InstantiateRenard()
     {
         Vector3 randomPosition = TrouverPositionSansArbre();
-
-        Instantiate(prefabToInstantiate, randomPosition, Quaternion.identity);
+        cloneRenard = Instantiate(prefabRenard, randomPosition, Quaternion.identity);
     }
 
+    /// <summary>
+    /// Trouver une position sans arbre (Eviter les collisions)
+    /// </summary>
+    /// <returns></returns>
     private Vector3 TrouverPositionSansArbre()
     {
         Vector3 positionAleatoire = Vector3.zero;
-        bool found = false;
+        bool positionTrouvee = false;
         int maxessaie = 50;
         int essaie = 0;
         float minDistance = 2f;
 
-        while (!found && essaie < maxessaie)
+        // Trouver une position aleatoire sans arbre (avec une limit)
+        while (!positionTrouvee && essaie < maxessaie)
         {
             positionAleatoire = new Vector3(UnityEngine.Random.Range(-50f, 50f), 0f, UnityEngine.Random.Range(-50f, 50f));
 
             Collider[] allColliders = UnityEngine.Object.FindObjectsOfType<Collider>();
 
-            bool isNearTrigger = false;
+            bool estProcheDeQqch = false;
             foreach (Collider collider in allColliders)
             {
 
@@ -97,15 +119,16 @@ public class GameManager : MonoBehaviour
 
                     if (collider.isTrigger && Vector3.Distance(collider.transform.position, positionAleatoire) < minDistance)
                     {
-                        isNearTrigger = true;
+                        estProcheDeQqch = true;
                         break;
                     }
                 }
             }
 
-            if (!isNearTrigger)
+            // S'il y a aucune collision, on a trouve une position
+            if (!estProcheDeQqch)
             {
-                found = true;
+                positionTrouvee = true;
             }
             else
             {
@@ -113,7 +136,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (!found)
+        // Si on a pas trouve de position, on retourne une position null
+        if (!positionTrouvee)
         {
             positionAleatoire = new Vector3(0f, 0f, 0f);
         }
@@ -121,25 +145,65 @@ public class GameManager : MonoBehaviour
         return positionAleatoire;
     }
 
+    /// <summary>
+    /// Methode pour determiner si on doit instancier un renard (nuit)
+    /// </summary>
+    /// <returns></returns>
     private bool TempPourInstantiate()
     {
-        Debug.Log("TEmpsss");
-        int currentHour = GetCurrentHour();
-        return currentHour == 21;
+        int heureCourrant = HeuresActuelle();
+        if (heureCourrant == 2) {
+            estNuit=true;
+
+            return true; 
+                }
+        else {             
+            return false;
+        }
     }
-    private int GetCurrentHour()
+
+    /// <summary>
+    /// Methode pour determiner l'heure actuelle
+    /// </summary>
+    /// <returns></returns>
+    private int HeuresActuelle()
     {
-        float proportionOfDay = _soleil.ProportionRestante;
-        int numberOfSecondsInADay = 24 * 60 * 60;
-        int currentSecond = (int)(proportionOfDay * numberOfSecondsInADay);
+        float jour = _soleil.ProportionRestante;
+        int nbSecDansJour = 24 * 60 * 60;
+        int secondCourrant = (int)(jour * nbSecDansJour);
 
-        // Calculate current hour
-        int currentHour = currentSecond / 3600;
+        // Calculation de l'heure actuelle
+        int heureCourrant = secondCourrant / 3600;
 
-        return currentHour;
+        return heureCourrant;
     }
 
+    /// <summary>
+    /// Methode pour detruire le renard
+    /// </summary>
+    private void DetruireRenard()
+    {
+          Destroy(cloneRenard);
+          estInstantiate = false;
+    }
 
+    /// <summary>
+    /// Methode pour determiner si on doit detruire le renard (jour)
+    /// </summary>
+    /// <returns></returns>
+    private bool TempPourDetruire()
+    {
+        int heureCourrant = HeuresActuelle();
+        if (heureCourrant == 15)
+        {
+            estNuit=false;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
 
     /// <summary>

@@ -45,10 +45,13 @@ public class MouvementRenard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-  
         _etat.Handle();
     }
 
+    /// <summary>
+    /// Methode pour changer l'etat du renard
+    /// </summary>
+    /// <param name="nouvelEtat"></param>
     public void ChangerEtat(EtatRenard nouvelEtat)
     {
         _etat.Leave();
@@ -59,5 +62,9 @@ public class MouvementRenard : MonoBehaviour
     public void Disparaitre()
     {
         ChangerEtat(new EtatDisparaitre(this, null));
+    }
+    public Transform[] GetPointsPatrouille()
+    {
+        return _pointsPatrouille;
     }
 }

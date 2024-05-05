@@ -8,6 +8,8 @@ TagManager:
   - Poule
   - Arbre
   - entree
+  - Renard
+  - PointSpecial
   layers:
   - Default
   - TransparentFX
