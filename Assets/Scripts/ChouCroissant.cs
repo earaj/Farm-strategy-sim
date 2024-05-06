@@ -33,7 +33,7 @@ public class ChouCroissant : MonoBehaviour
     }
 
 
-    private void JourneePassee()
+    public void JourneePassee()
     {
         journeesDeVie++;
 
@@ -58,12 +58,12 @@ public class ChouCroissant : MonoBehaviour
         }
     }
 
-    private void ChouPerdu()
+    public void ChouPerdu()
     {
         _chouMesh3D.CacherObjets();
     }
 
-    private void ChouPret()
+    public void ChouPret()
     {
         _chouMesh3D.CacherObjets();
         _chouMesh3D.ObjetPret.SetActive(true);

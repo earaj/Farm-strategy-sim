@@ -7,15 +7,28 @@ public class EmplacementChouVide : MonoBehaviour, IPlantable
 
     private void Start()
     {
-        _chouMesh3D = GetComponent<ChouMesh3D>();
+
     }
 
     public void Planter(Inventaire inventaireJoueur)
     {
         inventaireJoueur.Graines--;
+        if (_chouMesh3D == null)
+        {
+            _chouMesh3D = GetComponent<ChouMesh3D>();
+        }
+
+        if (_chouMesh3D != null)
+        {
+
         _chouMesh3D.ObjetBebe.SetActive(true);
         gameObject.AddComponent<ChouCroissant>();
         Destroy(this);
+        }
+        else
+        {
+            Debug.LogError("Le composant _chouMesh3D est null dans la méthode Planter().");
+        }
     }
 
 
