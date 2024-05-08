@@ -21,7 +21,7 @@ public class EtatPoursuit : EtatRenard
         if (PouleVisible())
         {
             AgentMouvement.destination = Poule.transform.position;
-            manger = Vector3.Distance(Renard.transform.position, Poule.transform.position) <= 3.0f;
+            manger = Vector3.Distance(Renard.transform.position, Poule.transform.position) <= 2.0f;
         }
 
         //Changement d'etat a manger

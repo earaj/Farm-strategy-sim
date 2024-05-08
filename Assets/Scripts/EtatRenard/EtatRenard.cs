@@ -21,7 +21,7 @@ public abstract class EtatRenard
     {
         set; get;
     }
-    private float distanceVisibiliteRenard = 25.0f;
+    private float distanceVisibiliteRenard = 100.0f;
 
     public EtatRenard(MouvementRenard renard, GameObject poule)
     {
@@ -49,7 +49,7 @@ public abstract class EtatRenard
 
             if (directionPoule.magnitude <= distanceVisibiliteRenard) //Distance au quelle re nard peut detecter le poule
             {
-                // Detection d'obstacke entre renard et poules
+                // Detection d'obstacle entre renard et poules
                 if (Physics.Raycast(positionRenard, directionPoule, out hit))
                 {
                     return hit.transform == Poule.transform;

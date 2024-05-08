@@ -14,20 +14,22 @@ public class EtatManger : EtatRenard
 
     public override void Handle()
     {
-        // Si le poule n'est pas visible, renard retourne a la patrouille
-        if (!PouleVisible())
-        {
-            Renard.ChangerEtat(new EtatPatrouille(Renard, Poule, Renard.GetPointsPatrouille()));
-        }
+
+       
 
         // Si une autre poule est visible, renard va le poursuit
         if (PouleVisible())
         {
             AgentMouvement.destination = Poule.transform.position;
-            if (Vector3.Distance(Renard.transform.position, Poule.transform.position) > 3.0f)
+            if (Vector3.Distance(Renard.transform.position, Poule.transform.position) > 10.0f)
             {
                 Renard.ChangerEtat(new EtatPoursuit(Renard, Poule));
             }
+        }        
+        // Si le poule n'est pas visible, renard retourne a la patrouille
+        else
+        {
+            Renard.ChangerEtat(new EtatPatrouille(Renard, Poule, Renard.GetPointsPatrouille()));
         }
     }
 

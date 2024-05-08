@@ -25,8 +25,8 @@ public class ContolleurJoueur : MonoBehaviour
                     {
                         Arbre arbre = hit.collider.GetComponent<Arbre>();
                         Buche buche= hit.collider.GetComponent<Buche>();
+                        Collation collation = hit.collider.GetComponent<Collation>();
 
-                        
                             if (arbre != null)
                             {
                                 sujet.ActiveNavMeshAgent();
@@ -37,6 +37,11 @@ public class ContolleurJoueur : MonoBehaviour
                                 sujet.ActiveNavMeshAgent();
                                 buche.EtatAUtiliser(sujet);
                             }
+                            if(collation != null)
+                            {
+                                sujet.ActiveNavMeshAgent();
+                                collation.EtatAUtiliser(sujet);
+                        }
                     }
                 }
             }

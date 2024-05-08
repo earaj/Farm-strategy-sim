@@ -10,6 +10,7 @@ TagManager:
   - entree
   - Renard
   - PointSpecial
+  - Collation
   layers:
   - Default
   - TransparentFX
