@@ -21,10 +21,7 @@ public class EtatManger : EtatRenard
         if (PouleVisible())
         {
             AgentMouvement.destination = Poule.transform.position;
-            if (Vector3.Distance(Renard.transform.position, Poule.transform.position) > 10.0f)
-            {
-                Renard.ChangerEtat(new EtatPoursuit(Renard, Poule));
-            }
+            Renard.ChangerEtat(new EtatPoursuit(Renard, Poule));
         }        
         // Si le poule n'est pas visible, renard retourne a la patrouille
         else

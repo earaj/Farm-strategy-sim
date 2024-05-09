@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Soleil _soleil;
     [SerializeField] private GameObject prefabRenard;
+    [SerializeField] private Collider[] exclusion;
+
     private GameObject cloneRenard;
 
     private ComportementJoueur _joueur;
@@ -111,16 +114,25 @@ public class GameManager : MonoBehaviour
             Collider[] allColliders = UnityEngine.Object.FindObjectsOfType<Collider>();
 
             bool estProcheDeQqch = false;
+            //Verifier si la position est proche d'un arbre
             foreach (Collider collider in allColliders)
             {
-
-                if (collider != this.GetComponent<Collider>())
+                //Verifier si la position est dans une zone interdite (maison magasin route)
+                foreach (Collider zone in exclusion)
                 {
-
-                    if (collider.isTrigger && Vector3.Distance(collider.transform.position, positionAleatoire) < minDistance)
+                    if (zone.bounds.Contains(positionAleatoire))
                     {
-                        estProcheDeQqch = true;
-                        break;
+                        estProcheDeQqch =true;
+                    }
+
+                    if (collider != this.GetComponent<Collider>())
+                    {
+
+                        if (collider.isTrigger && Vector3.Distance(collider.transform.position, positionAleatoire) < minDistance)
+                        {
+                            estProcheDeQqch = true;
+                            break;
+                        }
                     }
                 }
             }

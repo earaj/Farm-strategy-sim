@@ -30,8 +30,7 @@ public class EtatPatrouille : EtatRenard
         //Si le poule est visible, renard va le poursuit
         if (PouleVisible())
         {
-            MouvementRenard mouvement = Renard.GetComponent<MouvementRenard>();
-            mouvement.ChangerEtat(mouvement.Poursuite);
+            Renard.ChangerEtat(new EtatPoursuit(Renard, Poule));
         }
 
     }

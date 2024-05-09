@@ -16,19 +16,38 @@ public class EtatPoursuit : EtatRenard
 
     public override void Handle()
     {
-        bool manger = false;
-        //Si le poule est visible, renard va le manger
+        //Verfier si le poule est visible
         if (PouleVisible())
         {
-            AgentMouvement.destination = Poule.transform.position;
-            manger = Vector3.Distance(Renard.transform.position, Poule.transform.position) <= 2.0f;
+
+            GameObject[] lesPoules = GameObject.FindGameObjectsWithTag("Poule");
+
+            // Trouver le plus proche poule
+            GameObject pouleProche = null;
+            float disProche = Mathf.Infinity;
+            foreach (GameObject poules in lesPoules)
+            {
+                float distance = Vector3.Distance(Renard.transform.position, poules.transform.position);
+                if (distance < disProche)
+                {
+                    pouleProche = poules;
+                    disProche = distance;
+                }
+            }
+
+            //Distintaion a poule
+            if (pouleProche != null)
+            {
+                AgentMouvement.destination = pouleProche.transform.position;
+                Renard.ChangerEtat(new EtatPoursuit(Renard, pouleProche));
+                return;
+            }
         }
 
-        //Changement d'etat a manger
-        if (manger)
-        {
-            Renard.ChangerEtat(new EtatManger(Renard, Poule));
-        }
+        else {          
+            Renard.ChangerEtat(new EtatPatrouille(Renard, Poule, Renard.GetPointsPatrouille()));
+               }
+        
     }
 
     public override void Leave()
