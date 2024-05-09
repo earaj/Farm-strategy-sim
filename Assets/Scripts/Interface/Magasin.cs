@@ -134,7 +134,11 @@ public class Magasin : MonoBehaviour
         {
             for (int i = 0; i < nbPoulesAchete; i++)
             {
-                Instantiate(_modelePoule, _sortieMagasin.transform.position + new Vector3(0, 0, i), Quaternion.identity);
+                float angle = i * 360 * Mathf.Deg2Rad; 
+                Vector3 position = _sortieMagasin.transform.position - _sortieMagasin.transform.forward * 2; 
+                position += new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * 2; 
+
+                Instantiate(_modelePoule, position, Quaternion.identity);
             }
             nbPoulesAchete = 0;
         }
